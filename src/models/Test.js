@@ -11,8 +11,6 @@ const settingsSchema = new mongoose.Schema(
     liveScoreVisible: { type: Boolean, default: true },
     leaderboardVisibleToParticipants: { type: Boolean, default: false },
     maxAttempts: { type: Number, default: 1, min: 1 },
-    // Admin toggle: unlimited retakes while the test is open (the latest attempt counts).
-    allowRetakes: { type: Boolean, default: false },
   },
   { _id: false },
 );

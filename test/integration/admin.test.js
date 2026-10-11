@@ -275,7 +275,65 @@ describe('tests and questions', () => {
     const ended = await request(app).post(`/api/admin/tests/${test.id}/end`).set('Cookie', admin);
     expect(ended.body.test.status).toBe('ended');
     expect((await Attempt.findById(start.body.attempt.id).lean()).status).toBe('auto_submitted');
-    expect((await request(app).delete(`/api/admin/tests/${test.id}`).set('Cookie', admin)).status).toBe(409);
+  });
+
+  it('restarts an ended test: attempts are wiped and the same questions can be taken again', async () => {
+    const { test, questions } = await createTestWithQuestions({ status: 'live' });
+    const testId = String(test._id);
+    const p = await createParticipant();
+    const cookie = await participantCookie(p);
+    const first = await request(app).post(`/api/tests/${testId}/start`).set('Cookie', cookie);
+    await request(app)
+      .put(`/api/attempts/${first.body.attempt.id}/answers/${questions[0]._id}`)
+      .set('Cookie', cookie)
+      .send({ response: { selected: ['B'] } });
+    await request(app).post(`/api/admin/tests/${testId}/end`).set('Cookie', admin);
+    expect((await request(app).post(`/api/tests/${testId}/start`).set('Cookie', cookie)).status).toBe(409);
+
+    const restarted = await request(app).post(`/api/admin/tests/${testId}/restart`).set('Cookie', admin);
+    expect(restarted.status).toBe(200);
+    expect(restarted.body.test).toMatchObject({
+      status: 'draft',
+      startsAt: null,
+      endsAt: null,
+      questionCount: questions.length,
+      attempts: { started: 0, submitted: 0 },
+    });
+    expect(await Attempt.countDocuments({ testId })).toBe(0);
+    expect(await Question.countDocuments({ testId })).toBe(questions.length);
+    expect(
+      (await request(app).get(`/api/admin/tests/${testId}/leaderboard`).set('Cookie', admin)).body.entries,
+    ).toEqual([]);
+
+    // Same workflow as a new test: start it, and the participant takes it from scratch.
+    expect((await request(app).post(`/api/admin/tests/${testId}/start`).set('Cookie', admin)).body.test.status).toBe(
+      'live',
+    );
+    const again = await request(app).post(`/api/tests/${testId}/start`).set('Cookie', cookie);
+    expect(again.status).toBe(200);
+    expect(again.body.attempt).toMatchObject({ attemptNumber: 1, score: 0 });
+    expect(again.body.answers).toEqual([]);
+  });
+
+  it('only restarts live or ended tests', async () => {
+    const draft = await createDraft();
+    const res = await request(app).post(`/api/admin/tests/${draft.id}/restart`).set('Cookie', admin);
+    expect(res.status).toBe(409);
+    expect(res.body.error.code).toBe('INVALID_STATUS');
+  });
+
+  it('deletes a test with its questions and attempts', async () => {
+    const { test } = await createTestWithQuestions({ status: 'live' });
+    const p = await createParticipant();
+    const cookie = await participantCookie(p);
+    await request(app).post(`/api/tests/${test._id}/start`).set('Cookie', cookie);
+    await request(app).post(`/api/admin/tests/${test._id}/end`).set('Cookie', admin);
+
+    expect((await request(app).delete(`/api/admin/tests/${test._id}`).set('Cookie', admin)).status).toBe(204);
+    expect(await Test.exists({ _id: test._id })).toBeNull();
+    expect(await Question.countDocuments({ testId: test._id })).toBe(0);
+    expect(await Attempt.countDocuments({ testId: test._id })).toBe(0);
+    expect((await request(app).get(`/api/tests`).set('Cookie', cookie)).body.tests).toEqual([]);
   });
 
   it('reorders questions', async () => {

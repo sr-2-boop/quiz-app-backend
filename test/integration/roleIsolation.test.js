@@ -43,10 +43,15 @@ describe('authentication and role isolation', () => {
 
   it('blocks participants from every admin route', async () => {
     const cookie = await participantCookie(await createParticipant());
-    for (const [method, path] of ADMIN_ROUTES) {
+    const destructive = [
+      ['post', `/api/admin/tests/${testId}/restart`],
+      ['delete', `/api/admin/tests/${testId}`],
+    ];
+    for (const [method, path] of [...ADMIN_ROUTES, ...destructive]) {
       const res = await request(app)[method](path).set('Cookie', cookie);
       expect(res.status, `${method} ${path}`).toBe(403);
     }
+    expect((await request(app).post(`/api/admin/tests/${testId}/restart`)).status).toBe(401);
   });
 
   it('blocks admins from participant routes', async () => {

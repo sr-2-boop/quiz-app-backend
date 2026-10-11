@@ -30,6 +30,7 @@ export function testAdminRoutes(limiters) {
   router.post('/:id/unpublish', byId, tests.unpublish);
   router.post('/:id/start', byId, tests.start);
   router.post('/:id/end', byId, tests.end);
+  router.post('/:id/restart', byId, tests.restart);
   router.put('/:id/question-order', validate({ params: idParams, body: reorderBody }), tests.reorder);
 
   router.get('/:id/questions', byId, tests.listQuestions);

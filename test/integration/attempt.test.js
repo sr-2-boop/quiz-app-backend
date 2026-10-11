@@ -226,43 +226,6 @@ describe('feedback modes and visibility', () => {
   });
 });
 
-describe('admin retake toggle', () => {
-  it('lets participants retake as often as they like while it is on, and stops when it is off', async () => {
-    const ctx = await setup({ settings: { maxAttempts: 1, allowRetakes: true } });
-    const admin = adminCookie();
-    let attemptId;
-    for (let n = 1; n <= 3; n++) {
-      const start = await request(ctx.app).post(`/api/tests/${ctx.testId}/start`).set('Cookie', ctx.cookie);
-      expect(start.status).toBe(200);
-      expect(start.body.attempt.attemptNumber).toBe(n);
-      expect(start.body.test.settings.allowRetakes).toBe(true);
-      attemptId = start.body.attempt.id;
-      await put(ctx, attemptId, ctx.mcq._id, { selected: [n === 3 ? 'B' : 'A'] });
-      const submitted = await request(ctx.app).post(`/api/attempts/${attemptId}/submit`).set('Cookie', ctx.cookie);
-      expect(submitted.body.canRetake).toBe(true);
-    }
-    const list = await request(ctx.app).get('/api/tests').set('Cookie', ctx.cookie);
-    expect(list.body.tests[0]).toMatchObject({ canStart: true, myAttempt: { attemptNumber: 3 } });
-    const stored = await Attempt.findById(attemptId).lean();
-    expect(stored.score).toBe(2); // the latest attempt counts
-    expect(stored.history).toHaveLength(2);
-
-    const off = await request(ctx.app)
-      .patch(`/api/admin/tests/${ctx.testId}`)
-      .set('Cookie', admin)
-      .send({ settings: { allowRetakes: false } });
-    expect(off.status).toBe(200);
-    expect(off.body.test.settings).toMatchObject({ allowRetakes: false, maxAttempts: 1, shuffleQuestions: false });
-
-    const again = await request(ctx.app).post(`/api/tests/${ctx.testId}/start`).set('Cookie', ctx.cookie);
-    expect(again.status).toBe(409);
-    expect(again.body.error.code).toBe('NO_ATTEMPTS_LEFT');
-    expect(
-      (await request(ctx.app).get(`/api/attempts/${attemptId}/result`).set('Cookie', ctx.cookie)).body.canRetake,
-    ).toBe(false);
-  });
-});
-
 describe('server-enforced time', () => {
   it('rejects saves after expiry and auto-submits', async () => {
     const ctx = await setup();

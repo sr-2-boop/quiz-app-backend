@@ -38,6 +38,10 @@ export async function end(req, res) {
   res.json({ test: await tests.endTest(req.params.id) });
 }
 
+export async function restart(req, res) {
+  res.json({ test: await tests.restartTest(req.params.id) });
+}
+
 export async function reorder(req, res) {
   res.json({ test: await tests.reorderQuestions(req.params.id, req.body.questionOrder) });
 }

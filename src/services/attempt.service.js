@@ -52,13 +52,7 @@ function publicSettings(test) {
     liveScoreVisible: Boolean(test.settings?.liveScoreVisible),
     leaderboardVisible: Boolean(test.settings?.leaderboardVisibleToParticipants),
     maxAttempts: test.settings?.maxAttempts ?? 1,
-    allowRetakes: Boolean(test.settings?.allowRetakes),
   };
-}
-
-/** May a participant whose latest attempt is number `attemptNumber` start another one? */
-function hasAttemptsLeft(test, attemptNumber) {
-  return Boolean(test.settings?.allowRetakes) || attemptNumber < (test.settings?.maxAttempts ?? 1);
 }
 
 function computeExpiry(test, now) {
@@ -156,7 +150,7 @@ export async function listTestsForParticipant(user) {
         questionCount: t.questionOrder?.length ?? 0,
         isOpen: open,
         settings: publicSettings(t),
-        canStart: open && (!a || a.status === 'in_progress' || hasAttemptsLeft(t, a.attemptNumber)),
+        canStart: open && (!a || a.status === 'in_progress' || a.attemptNumber < (t.settings?.maxAttempts ?? 1)),
         myAttempt: a
           ? {
               id: String(a._id),
@@ -234,7 +228,7 @@ export async function startAttempt(user, testId) {
   };
 
   if (attempt) {
-    if (!hasAttemptsLeft(test, attempt.attemptNumber)) {
+    if (attempt.attemptNumber >= (test.settings?.maxAttempts ?? 1)) {
       throw conflict('NO_ATTEMPTS_LEFT', 'You have already submitted this test');
     }
     const retake = await Attempt.findOneAndUpdate(
@@ -442,7 +436,7 @@ export async function getAttemptResult(user, attemptId) {
       pendingCount: attempt.answers.filter((a) => a.status === 'pending').length,
     },
     feedbackAvailable: revealed,
-    canRetake: isTestOpen(test) && hasAttemptsLeft(test, attempt.attemptNumber),
+    canRetake: isTestOpen(test) && attempt.attemptNumber < (test.settings?.maxAttempts ?? 1),
     questions: [],
   };
 

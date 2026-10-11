@@ -62,7 +62,7 @@ const attemptSchema = new mongoose.Schema(
     answers: { type: [answerSchema], default: [] },
     score: { type: Number, default: 0 },
     timeTakenMs: { type: Number, default: null },
-    // Earlier attempts when retakes are allowed (maxAttempts > 1 or allowRetakes); the latest attempt counts.
+    // Earlier attempts when settings.maxAttempts > 1 (the latest attempt is the one that counts).
     history: { type: [historySchema], default: [] },
   },
   { timestamps: true },

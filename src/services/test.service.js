@@ -1,7 +1,7 @@
 import { env } from '../config/env.js';
 import { logger } from '../config/logger.js';
 import { roundMarks } from '../grading/normalize.js';
-import { Attempt, Question, Test } from '../models/index.js';
+import { Attempt, CodeRun, Question, Test } from '../models/index.js';
 import { badRequest, conflict, notFound } from '../utils/errors.js';
 import { toPlain } from '../utils/serialize.js';
 import { gradePendingAnswers } from './codeGrading.service.js';
@@ -65,14 +65,39 @@ export async function updateTest(id, input) {
   return getTest(updated._id);
 }
 
+/** Permanently delete every attempt of a test (answers, scores, ranks) and its code-run logs. */
+async function deleteAttempts(testId) {
+  const ids = (await Attempt.find({ testId }).select('_id').lean()).map((a) => a._id);
+  if (ids.length) await CodeRun.deleteMany({ attemptId: { $in: ids } });
+  await Attempt.deleteMany({ testId });
+}
+
+/** Delete a test in any status, with its questions and all attempts. Admins confirm this in the UI. */
 export async function deleteTest(id) {
   const test = await Test.findById(id).lean();
   if (!test) throw notFound('Test not found');
-  if (await Attempt.exists({ testId: test._id })) {
-    throw conflict('TEST_HAS_ATTEMPTS', 'This test already has attempts and cannot be deleted');
-  }
+  await Test.deleteOne({ _id: test._id }); // first, so no new attempt can start meanwhile
+  await deleteAttempts(test._id);
   await Question.deleteMany({ testId: test._id });
-  await Test.deleteOne({ _id: test._id });
+  broadcastTestStatus({ ...test, status: 'deleted' });
+  notifyTestActivity(test._id);
+}
+
+/**
+ * Run a live or ended test again: delete every attempt (answers, scores, ranks) and move it back to draft with
+ * no schedule. Its questions and settings stay, so the admin can edit, publish or start it as usual.
+ */
+export async function restartTest(id) {
+  const test = await transition(
+    id,
+    ['live', 'ended'],
+    { status: 'draft', startsAt: null, endsAt: null },
+    'Only a live or ended test can be restarted',
+  );
+  await deleteAttempts(test._id);
+  broadcastTestStatus(test);
+  notifyTestActivity(test._id);
+  return getTest(id);
 }
 
 /** Atomic status transition; 404 when missing, 409 when the current status doesn't allow it. */
