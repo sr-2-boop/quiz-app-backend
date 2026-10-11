@@ -5,7 +5,7 @@ import { env } from '../config/env.js';
 import { AccessKey, Participant } from '../models/index.js';
 import { disconnectUserSockets } from '../sockets/hub.js';
 import { AppError, forbidden, invalidCredentials, unauthorized } from '../utils/errors.js';
-import { normalizeMobile, normalizeUrn } from '../utils/normalize.js';
+import { NAME_PATTERN, normalizeMobile, normalizeName, normalizeUrn } from '../utils/normalize.js';
 import { verifyGoogleIdToken } from './googleVerifier.js';
 import { signToken, verifyToken } from './token.service.js';
 
@@ -65,20 +65,37 @@ export async function isValidAccessKey(candidate, now = new Date()) {
 }
 
 /**
- * Participant login: password = URN + the day's access key. Every failure is the same generic 401.
- * @param {{ mobile: string, urn: string, password: string }} credentials
+ * The participant for this URN, created on first login. The first login links the URN to its mobile number
+ * (and name); later logins must use the same mobile. Admin-imported participants keep their roster details.
  */
-export async function loginParticipant({ mobile, urn, password }) {
+async function findOrCreateParticipant({ urn, name, mobile }) {
+  const query = () =>
+    Participant.findOneAndUpdate(
+      { urn },
+      { $setOnInsert: { urn, name, mobile, section: '', isActive: true } },
+      { upsert: true, returnDocument: 'after' },
+    ).lean();
+  try {
+    return await query();
+  } catch (err) {
+    // Two first logins for the same URN at once: the other request inserted it, so this one finds it.
+    if (err?.code !== 11000) throw err;
+    return query();
+  }
+}
+
+/**
+ * Participant login: URN + name + mobile, and password = URN + the day's access key. Any student with a
+ * well-formed URN, name and mobile and the right password can sign in; their first login creates them.
+ * Every failure is the same generic 401.
+ * @param {{ urn: string, name: string, mobile: string, password: string }} credentials
+ */
+export async function loginParticipant({ urn, name, mobile, password }) {
   const normUrn = normalizeUrn(urn);
+  const normName = normalizeName(name);
   const normMobile = normalizeMobile(mobile);
 
-  if (!env.URN_REGEX.test(normUrn) || !env.MOBILE_REGEX.test(normMobile)) {
-    await bcrypt.compare(password, DUMMY_HASH);
-    throw invalidCredentials();
-  }
-
-  const participant = await Participant.findOne({ urn: normUrn }).lean();
-  if (!participant || !participant.isActive || participant.mobile !== normMobile) {
+  if (!env.URN_REGEX.test(normUrn) || !NAME_PATTERN.test(normName) || !env.MOBILE_REGEX.test(normMobile)) {
     await bcrypt.compare(password, DUMMY_HASH);
     throw invalidCredentials();
   }
@@ -90,7 +107,11 @@ export async function loginParticipant({ mobile, urn, password }) {
     throw invalidCredentials();
   }
 
+  // The key is checked before anything is written, so a wrong password never creates a participant.
   if (!(await isValidAccessKey(candidateKey))) throw invalidCredentials();
+
+  const participant = await findOrCreateParticipant({ urn: normUrn, name: normName, mobile: normMobile });
+  if (!participant.isActive || participant.mobile !== normMobile) throw invalidCredentials();
 
   // Single active session: the new session id replaces (and thereby invalidates) any previous one.
   const sessionId = randomUUID();

@@ -133,7 +133,7 @@ describe('Socket.IO live updates', () => {
     const revoked = nextEvent(student, 'session:revoked');
     await request(app)
       .post('/api/auth/participant/login')
-      .send({ urn: 'E25B002749', mobile: '9876543210', password: 'E25B002749K7Q2' });
+      .send({ urn: 'E25B002749', name: 'Asha Verma', mobile: '9876543210', password: 'E25B002749K7Q2' });
     expect(await revoked).toEqual({ reason: 'session_revoked' });
   });
 });

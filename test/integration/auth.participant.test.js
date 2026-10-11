@@ -9,7 +9,8 @@ useTestDb();
 
 const LOGIN = '/api/auth/participant/login';
 const GENERIC = { error: { code: 'INVALID_CREDENTIALS', message: 'Invalid credentials' } };
-const good = { urn: 'E25B002749', mobile: '9876543210', password: 'E25B002749K7Q2' };
+const good = { urn: 'E25B002749', name: 'Asha Verma', mobile: '9876543210', password: 'E25B002749K7Q2' };
+const newcomer = { urn: 'E25B000001', name: 'Ravi Kumar', mobile: '9123456789', password: 'E25B000001K7Q2' };
 
 describe('POST /api/auth/participant/login', () => {
   let app;
@@ -19,7 +20,7 @@ describe('POST /api/auth/participant/login', () => {
     await createAccessKey('K7Q2');
   });
 
-  it('logs in with mobile + URN + (URN + key) and sets an httpOnly cookie', async () => {
+  it('logs in with URN + name + mobile + (URN + key) and sets an httpOnly cookie', async () => {
     const res = await request(app).post(LOGIN).send(good);
     expect(res.status).toBe(200);
     expect(res.body.user).toEqual({
@@ -39,7 +40,7 @@ describe('POST /api/auth/participant/login', () => {
   it('normalizes URN case/spacing and mobile formatting', async () => {
     const res = await request(app)
       .post(LOGIN)
-      .send({ urn: ' e25b002749 ', mobile: '+91 98765-43210', password: 'e25b002749K7Q2' });
+      .send({ urn: ' e25b002749 ', name: '  Asha   Verma ', mobile: '+91 98765-43210', password: 'e25b002749K7Q2' });
     expect(res.status).toBe(200);
   });
 
@@ -50,10 +51,79 @@ describe('POST /api/auth/participant/login', () => {
     expect(res.status).toBe(200);
   });
 
+  it('signs in a student who is not on the roster and creates them on first login', async () => {
+    const res = await request(app).post(LOGIN).send(newcomer);
+    expect(res.status).toBe(200);
+    expect(res.body.user).toEqual({
+      role: 'participant',
+      id: expect.any(String),
+      urn: 'E25B000001',
+      name: 'Ravi Kumar',
+      section: '',
+    });
+    expect(res.body.user).not.toHaveProperty('mobile');
+    expect(await Participant.findOne({ urn: 'E25B000001' }).lean()).toMatchObject({
+      name: 'Ravi Kumar',
+      mobile: '9123456789',
+      section: '',
+      isActive: true,
+    });
+    const cookie = res.headers['set-cookie'][0].split(';')[0];
+    expect((await request(app).get('/api/auth/me').set('Cookie', cookie)).status).toBe(200);
+  });
+
+  it('links a URN to the mobile used on its first login', async () => {
+    expect((await request(app).post(LOGIN).send(newcomer)).status).toBe(200);
+    expect(
+      (
+        await request(app)
+          .post(LOGIN)
+          .send({ ...newcomer, name: 'Ravi K' })
+      ).status,
+    ).toBe(200);
+    const other = await request(app)
+      .post(LOGIN)
+      .send({ ...newcomer, mobile: '9000000001' });
+    expect(other.status).toBe(401);
+    expect(other.body).toEqual(GENERIC);
+    // The first login's details stay.
+    expect(await Participant.findOne({ urn: 'E25B000001' }).lean()).toMatchObject({
+      name: 'Ravi Kumar',
+      mobile: '9123456789',
+    });
+  });
+
+  it('keeps the roster name and section of an imported participant', async () => {
+    const res = await request(app)
+      .post(LOGIN)
+      .send({ ...good, name: 'Someone Else' });
+    expect(res.status).toBe(200);
+    expect(res.body.user).toMatchObject({ name: 'Asha Verma', section: 'A' });
+  });
+
+  it('never creates a participant when the password is wrong', async () => {
+    const res = await request(app)
+      .post(LOGIN)
+      .send({ ...newcomer, password: 'E25B000001WRONG' });
+    expect(res.status).toBe(401);
+    expect(await Participant.exists({ urn: 'E25B000001' })).toBeNull();
+  });
+
+  it('handles two simultaneous first logins for the same URN', async () => {
+    const results = await Promise.all([
+      request(app).post(LOGIN).send(newcomer),
+      request(app).post(LOGIN).send(newcomer),
+    ]);
+    expect(results.map((r) => r.status)).toEqual([200, 200]);
+    expect(await Participant.countDocuments({ urn: 'E25B000001' })).toBe(1);
+  });
+
   const failures = {
-    'unknown URN': { ...good, urn: 'E25B000001', password: 'E25B000001K7Q2' },
     'malformed URN': { ...good, urn: 'NOT-A-URN', password: 'NOT-A-URNK7Q2' },
     'malformed mobile': { ...good, mobile: '12345' },
+    'malformed name (digits)': { ...good, name: 'R2D2' },
+    'malformed name (one letter)': { ...good, name: 'A' },
+    'malformed name (symbols)': { ...good, name: '=HYPERLINK("x")' },
     'mobile not matching the roster': { ...good, mobile: '9123456780' },
     'wrong key': { ...good, password: 'E25B002749WRONG' },
     'key with wrong case': { ...good, password: 'E25B002749k7q2' },
@@ -91,6 +161,11 @@ describe('POST /api/auth/participant/login', () => {
       expect(res.status).toBe(401);
       expect(res.body).toEqual(GENERIC);
     }
+  });
+
+  it('requires the name field', async () => {
+    const { name: _name, ...withoutName } = good;
+    expect((await request(app).post(LOGIN).send(withoutName)).status).toBe(400);
   });
 
   it('rejects extra fields and operator injection', async () => {
@@ -151,7 +226,7 @@ describe('POST /api/auth/participant/login', () => {
     await createParticipant({ urn: 'E25B002750', mobile: '9876543211' });
     const other = await request(app)
       .post(LOGIN)
-      .send({ urn: 'E25B002750', mobile: '9876543211', password: 'E25B002750K7Q2' });
+      .send({ urn: 'E25B002750', name: 'Ravi Kumar', mobile: '9876543211', password: 'E25B002750K7Q2' });
     expect(other.status).toBe(200);
   });
 

@@ -170,7 +170,7 @@ describe('access keys', () => {
     const login = (key) =>
       request(app)
         .post('/api/auth/participant/login')
-        .send({ urn: 'E25B002749', mobile: '9876543210', password: `E25B002749${key}` });
+        .send({ urn: 'E25B002749', name: 'Asha Verma', mobile: '9876543210', password: `E25B002749${key}` });
     expect((await login('Alpha1')).status).toBe(200);
 
     const rotated = await request(app)
