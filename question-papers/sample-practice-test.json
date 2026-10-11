@@ -1,0 +1,123 @@
+{
+  "questions": [
+    {
+      "type": "mcq",
+      "statement": "Which line correctly declares a constructor for a class named `Student`?",
+      "marks": 1,
+      "options": [
+        {
+          "id": "A",
+          "text": "`void Student();`"
+        },
+        {
+          "id": "B",
+          "text": "`Student();`"
+        },
+        {
+          "id": "C",
+          "text": "`~Student();`"
+        },
+        {
+          "id": "D",
+          "text": "`int Student();`"
+        }
+      ],
+      "correctOptionIds": [
+        "B"
+      ],
+      "multiSelect": false,
+      "explanation": "A constructor has the same name as the class and no return type, not even `void`. `~Student();` is the destructor."
+    },
+    {
+      "type": "mcq",
+      "statement": "Which of these statements about destructors are true? **Select all that apply.**",
+      "marks": 1,
+      "options": [
+        {
+          "id": "A",
+          "text": "A destructor's name starts with `~`."
+        },
+        {
+          "id": "B",
+          "text": "A class can have several overloaded destructors."
+        },
+        {
+          "id": "C",
+          "text": "A destructor takes no parameters."
+        },
+        {
+          "id": "D",
+          "text": "A destructor must return `void`."
+        }
+      ],
+      "correctOptionIds": [
+        "A",
+        "C"
+      ],
+      "multiSelect": true,
+      "explanation": "A destructor is `~ClassName()`: no parameters and no return type. Without parameters it cannot be overloaded, so there is exactly one per class."
+    },
+    {
+      "type": "fill_blank",
+      "statement": "Fill in the blanks: a constructor has {{b1}} return type, and a destructor's name begins with the {{b2}} character.",
+      "marks": 1,
+      "blanks": [
+        {
+          "id": "b1",
+          "acceptedAnswers": [
+            "no",
+            "none"
+          ],
+          "caseSensitive": false
+        },
+        {
+          "id": "b2",
+          "acceptedAnswers": [
+            "~",
+            "tilde"
+          ],
+          "caseSensitive": false
+        }
+      ],
+      "explanation": "Constructors have **no** return type, and destructors are named with a **tilde** (`~`) followed by the class name."
+    },
+    {
+      "type": "snippet",
+      "statement": "What does this program print? Type the exact output.",
+      "marks": 1,
+      "language": "cpp",
+      "code": "#include <iostream>\nusing namespace std;\n\nclass Box {\npublic:\n    Box()  { cout << \"A\"; }\n    ~Box() { cout << \"B\"; }\n};\n\nint main() {\n    Box x;\n    Box y;\n    return 0;\n}",
+      "answerMode": "text",
+      "expectedOutput": "AABB",
+      "explanation": "`x` then `y` are constructed (prints `AA`). At the end of `main` they are destroyed in reverse order, `y` then `x` (prints `BB`)."
+    },
+    {
+      "type": "mcq",
+      "statement": "`Counter` declares only the constructor `Counter(int start)`. What happens when `Counter c;` is compiled?",
+      "marks": 1,
+      "options": [
+        {
+          "id": "A",
+          "text": "`c` is created with its count set to 0."
+        },
+        {
+          "id": "B",
+          "text": "The compiler generates a default constructor automatically."
+        },
+        {
+          "id": "C",
+          "text": "The program compiles but crashes at run time."
+        },
+        {
+          "id": "D",
+          "text": "It is a compile error: there is no default constructor."
+        }
+      ],
+      "correctOptionIds": [
+        "D"
+      ],
+      "multiSelect": false,
+      "explanation": "Once a class declares any constructor, the compiler no longer generates a default one. `Counter c;` needs `Counter()`, so it does not compile."
+    }
+  ]
+}

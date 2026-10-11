@@ -58,6 +58,7 @@ const settings = z.strictObject({
   liveScoreVisible: z.boolean().optional(),
   leaderboardVisibleToParticipants: z.boolean().optional(),
   maxAttempts: z.number().int().min(1).max(20).optional(),
+  allowRetakes: z.boolean().optional(),
 });
 
 const testFields = {
