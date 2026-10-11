@@ -43,6 +43,13 @@ describe('POST /api/auth/participant/login', () => {
     expect(res.status).toBe(200);
   });
 
+  it.each(['919876543210', '09876543210', '0091 98765 43210'])('accepts the mobile written as %s', async (mobile) => {
+    const res = await request(app)
+      .post(LOGIN)
+      .send({ ...good, mobile });
+    expect(res.status).toBe(200);
+  });
+
   const failures = {
     'unknown URN': { ...good, urn: 'E25B000001', password: 'E25B000001K7Q2' },
     'malformed URN': { ...good, urn: 'NOT-A-URN', password: 'NOT-A-URNK7Q2' },

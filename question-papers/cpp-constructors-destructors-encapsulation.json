@@ -5,520 +5,1120 @@
       "statement": "Which of the following statements about constructors is correct?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Constructors do not have a return type." },
-        { "id": "B", "text": "Every constructor must return the newly created object." },
-        { "id": "C", "text": "A constructor must return `void`." },
-        { "id": "D", "text": "A constructor's return type must match the class name." }
+        {
+          "id": "A",
+          "text": "Every constructor must return the newly created object."
+        },
+        {
+          "id": "B",
+          "text": "A constructor must return `void`."
+        },
+        {
+          "id": "C",
+          "text": "Constructors do not have a return type."
+        },
+        {
+          "id": "D",
+          "text": "A constructor's return type must match the class name."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "C"
+      ],
+      "multiSelect": false,
+      "explanation": "Constructors have no return type at all, not even `void`. They run automatically to initialise the new object."
     },
     {
       "type": "mcq",
       "statement": "A constructor without parameters is referred to as a _______ constructor.",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "copy" },
-        { "id": "B", "text": "default" },
-        { "id": "C", "text": "conversion" },
-        { "id": "D", "text": "delegating" }
+        {
+          "id": "A",
+          "text": "default"
+        },
+        {
+          "id": "B",
+          "text": "copy"
+        },
+        {
+          "id": "C",
+          "text": "conversion"
+        },
+        {
+          "id": "D",
+          "text": "delegating"
+        }
       ],
-      "correctOptionIds": ["B"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "A"
+      ],
+      "multiSelect": false,
+      "explanation": "A constructor that can be called without arguments is the default constructor."
     },
     {
       "type": "mcq",
       "statement": "A class defines at least one constructor, but no parameterless constructor. What happens when code tries to create an object without providing arguments?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "The compiler issues an error message." },
-        { "id": "B", "text": "The compiler supplies zero values for every constructor parameter." },
-        { "id": "C", "text": "The object is created without running a constructor." },
-        { "id": "D", "text": "The compiler automatically generates a default constructor despite the user-defined constructor." }
+        {
+          "id": "A",
+          "text": "The compiler supplies zero values for every constructor parameter."
+        },
+        {
+          "id": "B",
+          "text": "The object is created without running a constructor."
+        },
+        {
+          "id": "C",
+          "text": "The compiler automatically generates a default constructor despite the user-defined constructor."
+        },
+        {
+          "id": "D",
+          "text": "The compiler issues an error message."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "D"
+      ],
+      "multiSelect": false,
+      "explanation": "Once a class declares any constructor, the compiler stops generating the implicit default constructor, so creating an object without arguments is a compile error."
     },
     {
       "type": "mcq",
       "statement": "What is the syntax for declaring a destructor in a class named `class_name`?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`class_name~();`" },
-        { "id": "B", "text": "`void ~class_name();`" },
-        { "id": "C", "text": "`~class_name(void);`" },
-        { "id": "D", "text": "`delete class_name();`" }
+        {
+          "id": "A",
+          "text": "`class_name~();`"
+        },
+        {
+          "id": "B",
+          "text": "`~class_name(void);`"
+        },
+        {
+          "id": "C",
+          "text": "`void ~class_name();`"
+        },
+        {
+          "id": "D",
+          "text": "`delete class_name();`"
+        }
       ],
-      "correctOptionIds": ["C"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "B"
+      ],
+      "multiSelect": false,
+      "explanation": "A destructor is `~` plus the class name, with no return type and no parameters. `(void)` is just an explicitly empty parameter list."
     },
     {
       "type": "mcq",
       "statement": "Why is it impossible to overload a destructor?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Destructors do not have any parameters." },
-        { "id": "B", "text": "A destructor must be declared `static`." },
-        { "id": "C", "text": "A class can have only one data member." },
-        { "id": "D", "text": "Destructors are inherited but cannot be declared by a class." }
+        {
+          "id": "A",
+          "text": "A destructor must be declared `static`."
+        },
+        {
+          "id": "B",
+          "text": "Destructors do not have any parameters."
+        },
+        {
+          "id": "C",
+          "text": "A class can have only one data member."
+        },
+        {
+          "id": "D",
+          "text": "Destructors are inherited but cannot be declared by a class."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "B"
+      ],
+      "multiSelect": false,
+      "explanation": "Overloads need different parameter lists. A destructor never takes parameters, so a class can only have one destructor."
     },
     {
       "type": "mcq",
       "statement": "In what order are an object's individual data members destroyed?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "In the order opposite to the order in which they were created." },
-        { "id": "B", "text": "In the order in which they were declared." },
-        { "id": "C", "text": "In alphabetical order by member name." },
-        { "id": "D", "text": "All data members are destroyed simultaneously." }
+        {
+          "id": "A",
+          "text": "In the order in which they were declared."
+        },
+        {
+          "id": "B",
+          "text": "In alphabetical order by member name."
+        },
+        {
+          "id": "C",
+          "text": "All data members are destroyed simultaneously."
+        },
+        {
+          "id": "D",
+          "text": "In the order opposite to the order in which they were created."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "D"
+      ],
+      "multiSelect": false,
+      "explanation": "Members are constructed in declaration order and destroyed in the reverse order: last constructed, first destroyed."
     },
     {
       "type": "mcq",
       "statement": "When is a destructor called automatically for a local object that does not have static storage duration?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "At the end of the code block defining the object." },
-        { "id": "B", "text": "Immediately after the object's constructor returns." },
-        { "id": "C", "text": "Only when the program explicitly calls `delete`." },
-        { "id": "D", "text": "At the end of the entire program, regardless of the object's scope." }
+        {
+          "id": "A",
+          "text": "At the end of the code block defining the object."
+        },
+        {
+          "id": "B",
+          "text": "Immediately after the object's constructor returns."
+        },
+        {
+          "id": "C",
+          "text": "Only when the program explicitly calls `delete`."
+        },
+        {
+          "id": "D",
+          "text": "At the end of the entire program, regardless of the object's scope."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "A"
+      ],
+      "multiSelect": false,
+      "explanation": "An automatic (local) object is destroyed when control leaves the block `{ ... }` that defines it."
     },
     {
       "type": "mcq",
-      "statement": "According to the supplied course material, what is the primary motivation for defining inline methods in C++?",
+      "statement": "What is the primary motivation for defining inline methods in C++?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "To avoid the runtime overhead of saving re-entry addresses and jumping to functions." },
-        { "id": "B", "text": "To guarantee that the compiler never creates a function call." },
-        { "id": "C", "text": "To allow a method to access private members of unrelated classes." },
-        { "id": "D", "text": "To defer all method compilation until the program is running." }
+        {
+          "id": "A",
+          "text": "To guarantee that the compiler never creates a function call."
+        },
+        {
+          "id": "B",
+          "text": "To allow a method to access private members of unrelated classes."
+        },
+        {
+          "id": "C",
+          "text": "To avoid the runtime overhead of saving re-entry addresses and jumping to functions."
+        },
+        {
+          "id": "D",
+          "text": "To defer all method compilation until the program is running."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "C"
+      ],
+      "multiSelect": false,
+      "explanation": "A normal call saves the return address, jumps to the function and jumps back. Inlining lets the compiler put the body at the call site instead. `inline` is only a hint, so the compiler may still generate a call."
     },
     {
       "type": "mcq",
       "statement": "Methods defined directly within the class body without using the `inline` keyword are known as _______ inline methods.",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "implicit" },
-        { "id": "B", "text": "virtual" },
-        { "id": "C", "text": "external" },
-        { "id": "D", "text": "deferred" }
+        {
+          "id": "A",
+          "text": "virtual"
+        },
+        {
+          "id": "B",
+          "text": "external"
+        },
+        {
+          "id": "C",
+          "text": "deferred"
+        },
+        {
+          "id": "D",
+          "text": "implicit"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "D"
+      ],
+      "multiSelect": false,
+      "explanation": "A method whose body is written inside the class definition is implicitly inline, with no `inline` keyword needed."
     },
     {
       "type": "mcq",
       "statement": "Why must an explicit inline function's definition be available in the header file containing the class definition?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Because the compiler must have access to the code block of an inline function during compilation." },
-        { "id": "B", "text": "Because functions defined in headers are automatically private." },
-        { "id": "C", "text": "Because the linker cannot link functions that are defined in source files." },
-        { "id": "D", "text": "Because every header file is executed once at program startup." }
+        {
+          "id": "A",
+          "text": "Because functions defined in headers are automatically private."
+        },
+        {
+          "id": "B",
+          "text": "Because the compiler must have access to the code block of an inline function during compilation."
+        },
+        {
+          "id": "C",
+          "text": "Because the linker cannot link functions that are defined in source files."
+        },
+        {
+          "id": "D",
+          "text": "Because every header file is executed once at program startup."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "B"
+      ],
+      "multiSelect": false,
+      "explanation": "To expand an inline function where it is called, the compiler needs its body in every file that calls it, so the definition belongs in the header."
     },
     {
       "type": "mcq",
       "statement": "What is a major benefit of using access methods instead of placing data members directly in the public section?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Access methods can prevent invalid access attempts by performing sanity checks." },
-        { "id": "B", "text": "Access methods make every data member globally accessible." },
-        { "id": "C", "text": "Access methods eliminate the need to define a class interface." },
-        { "id": "D", "text": "Access methods guarantee that the class has no runtime cost." }
+        {
+          "id": "A",
+          "text": "Access methods make every data member globally accessible."
+        },
+        {
+          "id": "B",
+          "text": "Access methods eliminate the need to define a class interface."
+        },
+        {
+          "id": "C",
+          "text": "Access methods can prevent invalid access attempts by performing sanity checks."
+        },
+        {
+          "id": "D",
+          "text": "Access methods guarantee that the class has no runtime cost."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "C"
+      ],
+      "multiSelect": false,
+      "explanation": "Getters and setters can validate values before they reach private data, so the object always stays in a valid state."
     },
     {
       "type": "mcq",
       "statement": "Why should a getter returning a string data member by reference return it as a `const` reference?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "To prevent callers from writing directly to the private data member through the returned reference." },
-        { "id": "B", "text": "To force the getter to make a copy of the string every time." },
-        { "id": "C", "text": "To allow the getter to modify the string in a const object." },
-        { "id": "D", "text": "To make the string's lifetime extend beyond the lifetime of its object." }
+        {
+          "id": "A",
+          "text": "To prevent callers from writing directly to the private data member through the returned reference."
+        },
+        {
+          "id": "B",
+          "text": "To force the getter to make a copy of the string every time."
+        },
+        {
+          "id": "C",
+          "text": "To allow the getter to modify the string in a const object."
+        },
+        {
+          "id": "D",
+          "text": "To make the string's lifetime extend beyond the lifetime of its object."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "A"
+      ],
+      "multiSelect": false,
+      "explanation": "Returning `const string&` avoids a copy and stops callers from modifying the private member through the reference."
     },
     {
       "type": "mcq",
       "statement": "If an object is declared `const`, what restriction does that place on method calls?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Only methods identified as read-only (`const`) can be called for this object." },
-        { "id": "B", "text": "No methods, including constructors, can ever be called for the object." },
-        { "id": "C", "text": "Only static methods can be called for the object." },
-        { "id": "D", "text": "Every method called on the object becomes `const` automatically." }
+        {
+          "id": "A",
+          "text": "No methods, including constructors, can ever be called for the object."
+        },
+        {
+          "id": "B",
+          "text": "Only static methods can be called for the object."
+        },
+        {
+          "id": "C",
+          "text": "Every method called on the object becomes `const` automatically."
+        },
+        {
+          "id": "D",
+          "text": "Only methods identified as read-only (`const`) can be called for this object."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "D"
+      ],
+      "multiSelect": false,
+      "explanation": "For a `const` object, the compiler only allows calls to methods declared `const` (read-only methods)."
     },
     {
       "type": "mcq",
-      "statement": "Why does this code fail to compile?\n\n```cpp\nclass Account {\npublic:\n    Account(string n) { name = n; }\n};\nint main() {\n    Account acc;\n    return 0.0;\n}\n```",
+      "statement": "Why does this code fail to compile?\n\n```cpp\nclass Account {\npublic:\n    Account(string n) { name = n; }\n};\nint main() {\n    Account acc;\n    return 0;\n}\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "The class defines a constructor with a parameter, so no default constructor is generated, making `Account acc;` invalid." },
-        { "id": "B", "text": "A constructor is not allowed to accept a `string` parameter." },
-        { "id": "C", "text": "`Account acc;` calls the destructor before the object has been constructed." },
-        { "id": "D", "text": "A constructor must return `0` from `main`." }
+        {
+          "id": "A",
+          "text": "A constructor is not allowed to accept a `string` parameter."
+        },
+        {
+          "id": "B",
+          "text": "`Account acc;` calls the destructor before the object has been constructed."
+        },
+        {
+          "id": "C",
+          "text": "The class defines a constructor with a parameter, so no default constructor is generated, making `Account acc;` invalid."
+        },
+        {
+          "id": "D",
+          "text": "A constructor must return `0` from `main`."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "C"
+      ],
+      "multiSelect": false,
+      "explanation": "`Account(string)` is a user-declared constructor, so there is no default constructor, and `Account acc;` has nothing to call."
     },
     {
       "type": "mcq",
       "statement": "What is wrong with this destructor definition?\n\n```cpp\nclass Demo {\npublic:\n    ~Demo(int x) {\n        cout << x << endl;\n    }\n};\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Destructors cannot take any parameters." },
-        { "id": "B", "text": "A destructor must return `int`." },
-        { "id": "C", "text": "A destructor's name must be `delete Demo`." },
-        { "id": "D", "text": "A destructor must always be declared `static`." }
+        {
+          "id": "A",
+          "text": "Destructors cannot take any parameters."
+        },
+        {
+          "id": "B",
+          "text": "A destructor must return `int`."
+        },
+        {
+          "id": "C",
+          "text": "A destructor's name must be `delete Demo`."
+        },
+        {
+          "id": "D",
+          "text": "A destructor must always be declared `static`."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "A"
+      ],
+      "multiSelect": false,
+      "explanation": "Destructors are called automatically, so there is nowhere to pass arguments from. A destructor cannot have parameters."
     },
     {
       "type": "mcq",
       "statement": "Which version correctly updates an `Account` name and rejects an empty string?\n\n```cpp\n// Original flawed method:\nbool setName(string s) { name = s; }\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`bool setName( const string& s) { if(s.size() < 1) return false; name = s; return true; }`" },
-        { "id": "B", "text": "`void setName(const string& s) { if(s.empty()) return true; name = s; }`" },
-        { "id": "C", "text": "`bool setName(string s) { name = s; return false; }`" },
-        { "id": "D", "text": "`bool setName() const { name.clear(); return true; }`" }
+        {
+          "id": "A",
+          "text": "`void setName(const string& s) { if(s.empty()) return true; name = s; }`"
+        },
+        {
+          "id": "B",
+          "text": "`bool setName(const string& s) { if(s.size() < 1) return false; name = s; return true; }`"
+        },
+        {
+          "id": "C",
+          "text": "`bool setName(string s) { name = s; return false; }`"
+        },
+        {
+          "id": "D",
+          "text": "`bool setName() const { name.clear(); return true; }`"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "B"
+      ],
+      "multiSelect": false,
+      "explanation": "Option A rejects an empty string, stores valid input and returns a `bool` on every path. `const string&` also avoids an unnecessary copy."
     },
     {
       "type": "mcq",
       "statement": "A getter for a const object fails to compile because it lacks a required qualifier. How should it be fixed?\n\n```cpp\nunsigned long getNr() { return nr; }\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`unsigned long getNr() const { return nr; }`" },
-        { "id": "B", "text": "`const unsigned long getNr(unsigned long nr) { return nr; }`" },
-        { "id": "C", "text": "`unsigned long const getNr() volatile { return nr; }`" },
-        { "id": "D", "text": "`unsigned long getNr() static { return nr; }`" }
+        {
+          "id": "A",
+          "text": "`const unsigned long getNr(unsigned long nr) { return nr; }`"
+        },
+        {
+          "id": "B",
+          "text": "`unsigned long getNr() const { return nr; }`"
+        },
+        {
+          "id": "C",
+          "text": "`unsigned long const getNr() volatile { return nr; }`"
+        },
+        {
+          "id": "D",
+          "text": "`unsigned long getNr() static { return nr; }`"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "B"
+      ],
+      "multiSelect": false,
+      "explanation": "Adding `const` after the parameter list makes `getNr()` a read-only method, so it can be called on const objects."
     },
     {
       "type": "mcq",
       "statement": "Complete the `Book` constructor with default arguments `\"Untitled\"` and `0.0` for the `title` and `price` members.\n\n```cpp\nclass Book {\nprivate:\n    string title;\n    double price;\npublic:\n    // Implement constructor here\n};\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`Book(const string& t = \"Untitled\", double p = 0.0) { title = t; price = p; }`" },
-        { "id": "B", "text": "`void Book(string t, double p) { title = t; price = p; }`" },
-        { "id": "C", "text": "`Book() { title = \"Untitled\"; price = 0.0; }`" },
-        { "id": "D", "text": "`Book(const string& t = \"Untitled\") { title = t; }`" }
+        {
+          "id": "A",
+          "text": "`void Book(string t, double p) { title = t; price = p; }`"
+        },
+        {
+          "id": "B",
+          "text": "`Book() { title = \"Untitled\"; price = 0.0; }`"
+        },
+        {
+          "id": "C",
+          "text": "`Book(const string& t = \"Untitled\") { title = t; }`"
+        },
+        {
+          "id": "D",
+          "text": "`Book(const string& t = \"Untitled\", double p = 0.0) { title = t; price = p; }`"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "D"
+      ],
+      "multiSelect": false,
+      "explanation": "Default arguments let one constructor serve as `Book()`, `Book(\"C++\")` and `Book(\"C++\", 499.0)`."
     },
     {
       "type": "mcq",
       "statement": "Write the correct destructor declaration and empty definition for a class named `DatabaseConnection`.\n\n```cpp\nclass DatabaseConnection {\npublic:\n    // Declare and define destructor here\n};\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`~DatabaseConnection() { }`" },
-        { "id": "B", "text": "`void DatabaseConnection() { }`" },
-        { "id": "C", "text": "`DatabaseConnection::~() { }`" },
-        { "id": "D", "text": "`delete DatabaseConnection() { }`" }
+        {
+          "id": "A",
+          "text": "`void DatabaseConnection() { }`"
+        },
+        {
+          "id": "B",
+          "text": "`DatabaseConnection::~() { }`"
+        },
+        {
+          "id": "C",
+          "text": "`~DatabaseConnection() { }`"
+        },
+        {
+          "id": "D",
+          "text": "`delete DatabaseConnection() { }`"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "C"
+      ],
+      "multiSelect": false,
+      "explanation": "A destructor is `~ClassName()`, with no return type and no parameters."
     },
     {
       "type": "mcq",
       "statement": "If a class contains at least one constructor, a default constructor must be defined _______ if it is needed for uninitialized object creation.",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "implicitly by the linker" },
-        { "id": "B", "text": "explicitly" },
-        { "id": "C", "text": "after the destructor" },
-        { "id": "D", "text": "only in a derived class" }
+        {
+          "id": "A",
+          "text": "explicitly"
+        },
+        {
+          "id": "B",
+          "text": "implicitly by the linker"
+        },
+        {
+          "id": "C",
+          "text": "after the destructor"
+        },
+        {
+          "id": "D",
+          "text": "only in a derived class"
+        }
       ],
-      "correctOptionIds": ["B"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "A"
+      ],
+      "multiSelect": false,
+      "explanation": "When a class declares any constructor, a default constructor must be written explicitly (or requested with `= default`) if objects are created without arguments."
     },
     {
       "type": "mcq",
-      "statement": "What happens when `account nomoney = \"Poor, Charles\";` is executed and `account` has a constructor with one `string` parameter?",
+      "statement": "`account` has a (non-`explicit`) constructor with one `string` parameter. What happens when this line is executed?\n\n```cpp\naccount nomoney = string(\"Poor, Charles\");\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "It successfully calls the one-parameter constructor, behaving equivalently to `account nomoney(\"Poor, Charles\");`." },
-        { "id": "B", "text": "It always calls the default constructor and then assigns the string." },
-        { "id": "C", "text": "It fails because constructors cannot be used in copy-initialization." },
-        { "id": "D", "text": "It creates a pointer named `nomoney` that refers to a string literal." }
+        {
+          "id": "A",
+          "text": "It always calls the default constructor first and then assigns the string."
+        },
+        {
+          "id": "B",
+          "text": "It fails to compile because constructors cannot be used in copy-initialization."
+        },
+        {
+          "id": "C",
+          "text": "It creates a pointer named `nomoney` that refers to a string literal."
+        },
+        {
+          "id": "D",
+          "text": "It calls the one-parameter constructor, exactly like `account nomoney(string(\"Poor, Charles\"));`."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "D"
+      ],
+      "multiSelect": false,
+      "explanation": "Copy-initialisation from a `string` uses the non-explicit converting constructor, so it behaves like direct initialisation. Note: `account nomoney = \"Poor, Charles\";` would NOT compile, because `const char*` to `string` to `account` needs two user-defined conversions."
     },
     {
       "type": "mcq",
-      "statement": "Which object has the longest lifetime and is destroyed at the end of the program?",
+      "statement": "Consider this program. Which object has the longest lifetime and is destroyed only at the end of the program?\n\n```cpp\nclass Tracer { /* prints a message in its constructor and destructor */ };\n\nTracer globalObject;               // defined outside every function\n\nvoid f(Tracer parameterObject) {   // passed by value\n    Tracer localObject;\n    Tracer();                      // temporaryObject: lives only until the end of this statement\n}\n\nint main() {\n    f(Tracer());\n    return 0;\n}\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`localObject`" },
-        { "id": "B", "text": "`globalObject`" },
-        { "id": "C", "text": "`temporaryObject`" },
-        { "id": "D", "text": "`parameterObject`" }
+        {
+          "id": "A",
+          "text": "`globalObject`"
+        },
+        {
+          "id": "B",
+          "text": "`localObject`"
+        },
+        {
+          "id": "C",
+          "text": "`temporaryObject`"
+        },
+        {
+          "id": "D",
+          "text": "`parameterObject`"
+        }
       ],
-      "correctOptionIds": ["B"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "A"
+      ],
+      "multiSelect": false,
+      "explanation": "Global objects are constructed before `main()` starts and destroyed after it returns. Parameters and locals die when `f` returns, and temporaries at the end of their statement."
     },
     {
       "type": "mcq",
       "statement": "A method is declared inside a class and then defined outside the class body. If it is intended to be an inline method available from the header, what is wrong with this definition?\n\n```cpp\nclass Test {\npublic:\n    void show();\n};\nvoid Test::show() {\n    cout << \"Hello\" << endl;\n}\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "The method is defined as a regular method but lacks the `inline` keyword outside the class, or it should be defined inside the header." },
-        { "id": "B", "text": "A method defined outside a class must always be declared `static`." },
-        { "id": "C", "text": "Methods cannot use `cout` inside a class." },
-        { "id": "D", "text": "The method name must begin with a tilde to be defined outside the class." }
+        {
+          "id": "A",
+          "text": "A method defined outside a class must always be declared `static`."
+        },
+        {
+          "id": "B",
+          "text": "Methods cannot use `cout` inside a class."
+        },
+        {
+          "id": "C",
+          "text": "It is an ordinary (non-inline) definition: add the `inline` keyword, or define the method inside the class body."
+        },
+        {
+          "id": "D",
+          "text": "The method name must begin with a tilde to be defined outside the class."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "C"
+      ],
+      "multiSelect": false,
+      "explanation": "Without `inline`, this is an ordinary function definition. If the header is included in several `.cpp` files, the linker sees multiple definitions. Mark it `inline` or define it inside the class."
     },
     {
       "type": "mcq",
       "statement": "Fix this accessor so it can be called on a const `Account` object.\n\n```cpp\ndouble getState() { return state; }\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`double getState() const { return state; }`" },
-        { "id": "B", "text": "`const double getState(double state) { return state; }`" },
-        { "id": "C", "text": "`double getState() static { return state; }`" },
-        { "id": "D", "text": "`void getState() const { return state; }`" }
+        {
+          "id": "A",
+          "text": "`const double getState(double state) { return state; }`"
+        },
+        {
+          "id": "B",
+          "text": "`double getState() const { return state; }`"
+        },
+        {
+          "id": "C",
+          "text": "`double getState() static { return state; }`"
+        },
+        {
+          "id": "D",
+          "text": "`void getState() const { return state; }`"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "B"
+      ],
+      "multiSelect": false,
+      "explanation": "`const` after the parameter list makes `getState()` read-only, so const `Account` objects can call it."
     },
     {
       "type": "mcq",
       "statement": "Which is an inline getter named `getAge` that returns the private integer member `age` and is const-qualified?\n\n```cpp\nclass Person {\nprivate:\n    int age;\npublic:\n    // Write inline getter here\n};\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`int getAge() const { return age; }`" },
-        { "id": "B", "text": "`void getAge() { age = 0; }`" },
-        { "id": "C", "text": "`int getAge(int age) { return age; }`" },
-        { "id": "D", "text": "`int const getAge(int age) const { return age; }`" }
+        {
+          "id": "A",
+          "text": "`void getAge() { age = 0; }`"
+        },
+        {
+          "id": "B",
+          "text": "`int getAge(int age) { return age; }`"
+        },
+        {
+          "id": "C",
+          "text": "`int const getAge(int age) const { return age; }`"
+        },
+        {
+          "id": "D",
+          "text": "`int getAge() const { return age; }`"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "D"
+      ],
+      "multiSelect": false,
+      "explanation": "A getter returns the member, takes no parameters and is `const` because it does not change the object."
     },
     {
       "type": "mcq",
       "statement": "Objects created by a constructor must be cleaned up in an orderly manner by a special method called a _______.",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "destructor" },
-        { "id": "B", "text": "deallocator" },
-        { "id": "C", "text": "finalizer function" },
-        { "id": "D", "text": "constructor overload" }
+        {
+          "id": "A",
+          "text": "deallocator"
+        },
+        {
+          "id": "B",
+          "text": "destructor"
+        },
+        {
+          "id": "C",
+          "text": "finalizer function"
+        },
+        {
+          "id": "D",
+          "text": "constructor overload"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "B"
+      ],
+      "multiSelect": false,
+      "explanation": "A destructor does the clean-up (freeing memory, closing files) when an object's lifetime ends."
     },
     {
       "type": "mcq",
       "statement": "What happens if a class does not define a destructor?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "The compiler creates a minimal version of a destructor as a public member, called the default destructor." },
-        { "id": "B", "text": "The class cannot be instantiated." },
-        { "id": "C", "text": "The compiler inserts a destructor that always deletes every pointer member." },
-        { "id": "D", "text": "The object is never destroyed." }
+        {
+          "id": "A",
+          "text": "The class cannot be instantiated."
+        },
+        {
+          "id": "B",
+          "text": "The compiler inserts a destructor that always deletes every pointer member."
+        },
+        {
+          "id": "C",
+          "text": "The compiler creates a minimal version of a destructor as a public member, called the default destructor."
+        },
+        {
+          "id": "D",
+          "text": "The object is never destroyed."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "C"
+      ],
+      "multiSelect": false,
+      "explanation": "Without a user-declared destructor, the compiler generates a public default destructor that destroys the members. It does not `delete` raw pointers the class owns."
     },
     {
       "type": "mcq",
       "statement": "Why can't the compiler determine whether a method performs write operations or only read operations unless additional information is supplied?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Member methods could potentially alter data members unless explicitly qualified as `const`." },
-        { "id": "B", "text": "All C++ methods are assumed to be `static` by default." },
-        { "id": "C", "text": "The compiler cannot inspect the body of a member method." },
-        { "id": "D", "text": "Data members are always mutable, even in const objects." }
+        {
+          "id": "A",
+          "text": "Member methods could potentially alter data members unless explicitly qualified as `const`."
+        },
+        {
+          "id": "B",
+          "text": "All C++ methods are assumed to be `static` by default."
+        },
+        {
+          "id": "C",
+          "text": "Private data members are invisible to the compiler."
+        },
+        {
+          "id": "D",
+          "text": "Data members are always mutable, even in const objects."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "A"
+      ],
+      "multiSelect": false,
+      "explanation": "Unless a method is declared `const`, the compiler must assume it may modify data members, so it cannot be called on a const object."
     },
     {
       "type": "mcq",
       "statement": "What is the error in this object definition if `Account` only has a constructor that accepts one `string` parameter?\n\n```cpp\naccount somemoney(\"Li, Ed\", 10.0);\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "The class does not contain a constructor with two parameters matching this signature." },
-        { "id": "B", "text": "Object names cannot contain the word `money`." },
-        { "id": "C", "text": "A string argument cannot be passed to a constructor." },
-        { "id": "D", "text": "Constructors cannot be called when defining objects." }
+        {
+          "id": "A",
+          "text": "The class does not contain a constructor with two parameters matching this signature."
+        },
+        {
+          "id": "B",
+          "text": "Object names cannot contain the word `money`."
+        },
+        {
+          "id": "C",
+          "text": "A string argument cannot be passed to a constructor."
+        },
+        {
+          "id": "D",
+          "text": "Constructors cannot be called when defining objects."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "A"
+      ],
+      "multiSelect": false,
+      "explanation": "Two arguments are passed, but the only constructor takes one `string`. No constructor matches the call."
     },
     {
       "type": "mcq",
-      "statement": "Correct this inline display method definition for `Account` when it is placed in the class header file.\n\n```cpp\ninline void Account::display() {\n    cout << \"Account holder: \" << name << endl;\n}\n```",
+      "statement": "This header file does not compile. Which corrected definition of `display()` fixes it?\n\n```cpp\nclass Account {\n    string name;\npublic:\n    void display() const;\n};\n\ninline void Account::display() {\n    cout << \"Account holder: \" << name << endl;\n}\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`inline void Account::display() const { cout << \"Account holder: \" << name << endl; }`" },
-        { "id": "B", "text": "`const inline Account::display() { cout << name; }`" },
-        { "id": "C", "text": "`inline void Account::display() { name = \"Account holder\"; }`" },
-        { "id": "D", "text": "`void inline Account()::display const { cout << name; }`" }
+        {
+          "id": "A",
+          "text": "`const inline Account::display() { cout << name; }`"
+        },
+        {
+          "id": "B",
+          "text": "`inline void Account::display() { name = \"Account holder\"; }`"
+        },
+        {
+          "id": "C",
+          "text": "`void inline Account()::display const { cout << name; }`"
+        },
+        {
+          "id": "D",
+          "text": "`inline void Account::display() const { cout << \"Account holder: \" << name << endl; }`"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "D"
+      ],
+      "multiSelect": false,
+      "explanation": "The definition must repeat the `const` from the declaration. Without it, it defines a different member function that the class never declared."
     },
     {
       "type": "mcq",
       "statement": "Write a `setState` method that rejects negative values, otherwise updates the private `double state` member and returns `true`.\n\n```cpp\nclass Account {\nprivate:\n    double state;\npublic:\n    // Write setter method here\n};\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`bool setState(double x) { if(x < 0) return false; state = x; return true; }`" },
-        { "id": "B", "text": "`void setState(double x) const { state = x; }`" },
-        { "id": "C", "text": "`bool setState(double x) { state = x; return x < 0; }`" },
-        { "id": "D", "text": "`double setState() { return state; }`" }
+        {
+          "id": "A",
+          "text": "`void setState(double x) const { state = x; }`"
+        },
+        {
+          "id": "B",
+          "text": "`bool setState(double x) { if(x < 0) return false; state = x; return true; }`"
+        },
+        {
+          "id": "C",
+          "text": "`bool setState(double x) { state = x; return x < 0; }`"
+        },
+        {
+          "id": "D",
+          "text": "`double setState() { return state; }`"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "B"
+      ],
+      "multiSelect": false,
+      "explanation": "Reject invalid input first, then update the member and return `true`."
     },
     {
       "type": "mcq",
       "statement": "To allow controlled access to private data members without compromising data encapsulation, programmers use _______ methods.",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "access" },
-        { "id": "B", "text": "global" },
-        { "id": "C", "text": "friend-only" },
-        { "id": "D", "text": "allocation" }
+        {
+          "id": "A",
+          "text": "global"
+        },
+        {
+          "id": "B",
+          "text": "friend-only"
+        },
+        {
+          "id": "C",
+          "text": "access"
+        },
+        {
+          "id": "D",
+          "text": "allocation"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "C"
+      ],
+      "multiSelect": false,
+      "explanation": "Access methods (getters and setters) give controlled access to private data without breaking encapsulation."
     },
     {
       "type": "mcq",
       "statement": "Which statement describes destruction order when an object contains another object as a data member?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Member object destructors are called in the reverse order of their creation." },
-        { "id": "B", "text": "Member object destructors are called in alphabetical order." },
-        { "id": "C", "text": "The containing object's destructor always runs after every member destructor." },
-        { "id": "D", "text": "Member object destructors are never called automatically." }
+        {
+          "id": "A",
+          "text": "Member object destructors are called in alphabetical order."
+        },
+        {
+          "id": "B",
+          "text": "The containing object's destructor always runs after every member destructor."
+        },
+        {
+          "id": "C",
+          "text": "Member object destructors are called in the reverse order of their creation."
+        },
+        {
+          "id": "D",
+          "text": "Member object destructors are never called automatically."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "C"
+      ],
+      "multiSelect": false,
+      "explanation": "The containing object's destructor body runs first. Then its member objects are destroyed in the reverse order of their construction."
     },
     {
       "type": "mcq",
       "statement": "What is wrong with this attempt to define a const object if `Account` only has a constructor requiring a `string` name?\n\n```cpp\nconst Account inv;\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Const objects must be initialized when defined, and no default constructor is available." },
-        { "id": "B", "text": "Const objects cannot be instances of classes." },
-        { "id": "C", "text": "The `const` keyword can only be applied to pointers." },
-        { "id": "D", "text": "A const object must be allocated with `new`." }
+        {
+          "id": "A",
+          "text": "Const objects cannot be instances of classes."
+        },
+        {
+          "id": "B",
+          "text": "The `const` keyword can only be applied to pointers."
+        },
+        {
+          "id": "C",
+          "text": "A const object must be allocated with `new`."
+        },
+        {
+          "id": "D",
+          "text": "Const objects must be initialized when defined, and no default constructor is available."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "D"
+      ],
+      "multiSelect": false,
+      "explanation": "A const object must be initialised when it is defined. `const Account inv;` needs a default constructor, which `Account` does not have."
     },
     {
       "type": "mcq",
       "statement": "Correct the constructor definition, optimizing string parameter passing with a const reference.\n\n```cpp\nAccount::Account(string a_name, unsigned long a_nr, double a_state) {\n    name = a_name; nr = a_nr; state = a_state;\n}\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`Account::Account(const string& a_name, unsigned long a_nr, double a_state) { name = a_name; nr = a_nr; state = a_state; }`" },
-        { "id": "B", "text": "`void Account::Account(string& a_name, unsigned long a_nr, double a_state) { name = a_name; nr = a_nr; state = a_state; }`" },
-        { "id": "C", "text": "`Account::Account(const string& a_name) { name = a_name; nr = a_nr; state = a_state; }`" },
-        { "id": "D", "text": "`Account::Account(string a_name, unsigned long a_nr, double a_state) const { name = a_name; nr = a_nr; state = a_state; }`" }
+        {
+          "id": "A",
+          "text": "`Account::Account(const string& a_name, unsigned long a_nr, double a_state) { name = a_name; nr = a_nr; state = a_state; }`"
+        },
+        {
+          "id": "B",
+          "text": "`void Account::Account(string& a_name, unsigned long a_nr, double a_state) { name = a_name; nr = a_nr; state = a_state; }`"
+        },
+        {
+          "id": "C",
+          "text": "`Account::Account(const string& a_name) { name = a_name; nr = a_nr; state = a_state; }`"
+        },
+        {
+          "id": "D",
+          "text": "`Account::Account(string a_name, unsigned long a_nr, double a_state) const { name = a_name; nr = a_nr; state = a_state; }`"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "A"
+      ],
+      "multiSelect": false,
+      "explanation": "`const string&` avoids copying the string and promises not to change it. Constructors never have a return type or a trailing `const`."
     },
     {
       "type": "mcq",
       "statement": "Which complete inline getter returns a read-only reference to a private `string name` member and is const-qualified?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "`const string& getName() const { return name; }`" },
-        { "id": "B", "text": "`string& getName() { return name; }`" },
-        { "id": "C", "text": "`const string getName(const string& name) { return name; }`" },
-        { "id": "D", "text": "`void getName() const { return name; }`" }
+        {
+          "id": "A",
+          "text": "`string& getName() { return name; }`"
+        },
+        {
+          "id": "B",
+          "text": "`const string& getName() const { return name; }`"
+        },
+        {
+          "id": "C",
+          "text": "`const string getName(const string& name) { return name; }`"
+        },
+        {
+          "id": "D",
+          "text": "`void getName() const { return name; }`"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "B"
+      ],
+      "multiSelect": false,
+      "explanation": "`const string&` avoids a copy and blocks modification, and the trailing `const` lets const objects call the getter."
     },
     {
       "type": "mcq",
       "statement": "Methods that perform only read operations and need to be called for constant objects must be identified as _______.",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "read-only" },
-        { "id": "B", "text": "virtual" },
-        { "id": "C", "text": "static-only" },
-        { "id": "D", "text": "immutable-returning" }
+        {
+          "id": "A",
+          "text": "virtual"
+        },
+        {
+          "id": "B",
+          "text": "static-only"
+        },
+        {
+          "id": "C",
+          "text": "immutable-returning"
+        },
+        {
+          "id": "D",
+          "text": "read-only"
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "D"
+      ],
+      "multiSelect": false,
+      "explanation": "Read-only methods (declared `const` after the parameter list) are the only methods a const object can call."
     },
     {
       "type": "mcq",
       "statement": "What is a primary advantage of modifying a class's internal data structures while keeping its public interface unchanged through access methods?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Application programs using the class can be updated by simply recompiling without modifying the application code itself." },
-        { "id": "B", "text": "Applications no longer need to link against the class implementation." },
-        { "id": "C", "text": "The class's private data automatically becomes public." },
-        { "id": "D", "text": "Existing binaries are guaranteed to work without recompilation after any internal change." }
+        {
+          "id": "A",
+          "text": "Application programs using the class can be updated by simply recompiling without modifying the application code itself."
+        },
+        {
+          "id": "B",
+          "text": "Applications no longer need to link against the class implementation."
+        },
+        {
+          "id": "C",
+          "text": "The class's private data automatically becomes public."
+        },
+        {
+          "id": "D",
+          "text": "Existing binaries are guaranteed to work without recompilation after any internal change."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "A"
+      ],
+      "multiSelect": false,
+      "explanation": "Because the public interface stays the same, programs that use the class only need to be recompiled, not rewritten."
     },
     {
       "type": "mcq",
       "statement": "A program has already created an object named `nomoney` and then tries to invoke that object's constructor explicitly again. Why does this cause a compilation error?",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Constructors cannot be called explicitly for an existing object (`nomoney`)." },
-        { "id": "B", "text": "Constructors can only be called on pointers." },
-        { "id": "C", "text": "An object can only be created inside a destructor." },
-        { "id": "D", "text": "An object named `nomoney` must have static storage duration." }
+        {
+          "id": "A",
+          "text": "Constructors can only be called on pointers."
+        },
+        {
+          "id": "B",
+          "text": "An object can only be created inside a destructor."
+        },
+        {
+          "id": "C",
+          "text": "Constructors cannot be called explicitly for an existing object (`nomoney`)."
+        },
+        {
+          "id": "D",
+          "text": "An object named `nomoney` must have static storage duration."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "C"
+      ],
+      "multiSelect": false,
+      "explanation": "A constructor runs exactly once, when the object is created. To change an existing object, use assignment or a setter."
     },
     {
       "type": "mcq",
       "statement": "Which change fixes the const-correctness issue in this class skeleton?\n\n```cpp\nclass Item {\nprivate:\n    unsigned long nr;\npublic:\n    Item(unsigned long n = 0) { nr = n; }\n    ~Item() {}\n    unsigned long getNr() { return nr; }\n};\n```",
       "marks": 1,
       "options": [
-        { "id": "A", "text": "Change `unsigned long getNr() { return nr; }` to `unsigned long getNr() const { return nr; }`." },
-        { "id": "B", "text": "Change `~Item() {}` to `~Item(unsigned long nr) {}`." },
-        { "id": "C", "text": "Remove the default value from `Item(unsigned long n = 0)`." },
-        { "id": "D", "text": "Change `nr` to a public static member." }
+        {
+          "id": "A",
+          "text": "Change `~Item() {}` to `~Item(unsigned long nr) {}`."
+        },
+        {
+          "id": "B",
+          "text": "Change `unsigned long getNr() { return nr; }` to `unsigned long getNr() const { return nr; }`."
+        },
+        {
+          "id": "C",
+          "text": "Remove the default value from `Item(unsigned long n = 0)`."
+        },
+        {
+          "id": "D",
+          "text": "Change `nr` to a public static member."
+        }
       ],
-      "correctOptionIds": ["A"],
-      "multiSelect": false
+      "correctOptionIds": [
+        "B"
+      ],
+      "multiSelect": false,
+      "explanation": "`getNr()` does not modify the object. Marking it `const` lets const `Item` objects call it."
     }
   ]
 }

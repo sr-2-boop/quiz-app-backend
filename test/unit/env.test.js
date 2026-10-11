@@ -38,6 +38,12 @@ describe('parseEnv', () => {
     expect(parseEnv({ ...base, COOKIE_SAME_SITE: 'none', COOKIE_SECURE: 'true' }).COOKIE_SAME_SITE).toBe('none');
   });
 
+  it('reduces CLIENT_ORIGIN entries to bare origins', () => {
+    const env = parseEnv({ ...base, CLIENT_ORIGIN: 'https://quiz.vercel.app/, http://localhost:5173/login' });
+    expect(env.CLIENT_ORIGIN).toEqual(['https://quiz.vercel.app', 'http://localhost:5173']);
+    expect(() => parseEnv({ ...base, CLIENT_ORIGIN: 'quiz.vercel.app' })).toThrow(/CLIENT_ORIGIN/);
+  });
+
   it('rejects invalid regexes and emails', () => {
     expect(() => parseEnv({ ...base, URN_REGEX: '([' })).toThrow(/URN_REGEX/);
     expect(() => parseEnv({ ...base, ADMIN_EMAILS: 'not-an-email' })).toThrow(/ADMIN_EMAILS/);

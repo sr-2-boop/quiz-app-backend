@@ -35,8 +35,13 @@ const envSchema = z
       .string({ error: 'is required' })
       .regex(/^mongodb(\+srv)?:\/\//, 'must start with mongodb:// or mongodb+srv://'),
 
-    // One origin, or several comma-separated.
-    CLIENT_ORIGIN: z.string().default('http://localhost:5173').transform(csv).pipe(z.array(z.url()).min(1)),
+    // One origin, or several comma-separated. Browsers send the Origin header without a path or trailing slash,
+    // so "https://quiz.example.com/" is reduced to "https://quiz.example.com" (CORS compares exactly).
+    CLIENT_ORIGIN: z
+      .string()
+      .default('http://localhost:5173')
+      .transform(csv)
+      .pipe(z.array(z.url().transform((v) => new URL(v).origin)).min(1)),
 
     JWT_SECRET: z
       .string({ error: 'is required (generate one with: openssl rand -hex 32)' })

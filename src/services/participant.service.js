@@ -23,6 +23,21 @@ const rosterRow = z.object({
   section: z.string().trim().max(40).default(''),
 });
 
+// Header spellings seen in university spreadsheets, after normalizeHeader ("Mobile No." -> "mobileno").
+const ROSTER_COLUMNS = {
+  urn: ['urn', 'urnno', 'urnnumber', 'universityrollno', 'universityrollnumber', 'rollno', 'rollnumber'],
+  name: ['name', 'studentname', 'fullname', 'nameofstudent', 'nameofthestudent'],
+  mobile: ['mobile', 'mobileno', 'mobilenumber', 'phone', 'phoneno', 'phonenumber', 'contact', 'contactno'],
+  section: ['section', 'sec', 'group', 'batch'],
+};
+
+/** Which header each roster field is read from (the first alias present in the file). */
+function rosterColumnMap(headers) {
+  return Object.fromEntries(
+    Object.entries(ROSTER_COLUMNS).map(([field, aliases]) => [field, aliases.find((a) => headers.includes(a))]),
+  );
+}
+
 /**
  * Roster import (xlsx/csv with columns URN, Name, Mobile, Section). Upserts by URN, validates every row,
  * reports row-level errors and never deletes participants missing from the file.
@@ -30,7 +45,8 @@ const rosterRow = z.object({
  */
 export async function importRoster(file, { mode }) {
   const { headers, rows } = await readTable(file, { maxRows: MAX_ROSTER_ROWS });
-  const missing = ['urn', 'name', 'mobile'].filter((h) => !headers.includes(h));
+  const columns = rosterColumnMap(headers);
+  const missing = ['urn', 'name', 'mobile'].filter((field) => !columns[field]);
   if (missing.length) {
     throw badRequest(
       `Missing column(s): ${missing.join(', ')}. Expected: URN, Name, Mobile, Section`,
@@ -43,10 +59,10 @@ export async function importRoster(file, { mode }) {
   const seen = new Map();
   for (const { rowNumber, values } of rows) {
     const parsed = rosterRow.safeParse({
-      urn: values.urn ?? '',
-      name: values.name ?? '',
-      mobile: values.mobile ?? values.phone ?? '',
-      section: values.section ?? '',
+      urn: values[columns.urn] ?? '',
+      name: values[columns.name] ?? '',
+      mobile: values[columns.mobile] ?? '',
+      section: (columns.section && values[columns.section]) ?? '',
     });
     if (!parsed.success) {
       for (const issue of parsed.error.issues) {

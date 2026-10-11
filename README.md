@@ -33,8 +33,18 @@ the service is created, so it can remain unhealthy until these values are added:
 - `CLIENT_ORIGIN`: exact frontend Vercel origin, without a trailing slash.
 
 The IaC file sets `NODE_ENV=production`, `COOKIE_SECURE=true`, `COOKIE_SAME_SITE=none`, `TRUST_PROXY=1`, and
-`CODE_EXECUTION_ENABLED=false`. `COOKIE_SAME_SITE=none` is appropriate for the separate default Vercel/Railway
-domains; if you use same-site custom domains, switch it to `lax`.
+`CODE_EXECUTION_ENABLED=false`. Set `CLIENT_ORIGIN` to the exact Vercel frontend origin (scheme + hostname,
+without a path or trailing slash). CORS and Socket.IO both use this allow-list; the HTTP API and the Socket.IO
+handshake both rely on the same `httpOnly` JWT cookie.
+
+On Vercel, set `VITE_API_URL` to the Railway public origin only, without `/api` or `/socket.io`; the frontend
+uses that origin for both HTTP and Socket.IO. Redeploy Vercel after changing the variable. The frontend's
+deployment README has connection checks and browser troubleshooting.
+
+`COOKIE_SAME_SITE=none` is appropriate for separate Vercel/Railway default hostnames, but browser
+third-party-cookie blocking may still prevent authentication. For more reliable cookie behavior, use custom
+frontend/API domains under the same site (for example, `quiz.example.com` and `api.example.com`), set
+`COOKIE_SAME_SITE=lax`, and update `CLIENT_ORIGIN` to the exact frontend domain.
 
 Add the frontend's Vercel domain to the Google OAuth client's **Authorized JavaScript origins**. Browser
 third-party-cookie restrictions may block authentication across unrelated `*.vercel.app` and Railway domains,

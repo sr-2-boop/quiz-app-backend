@@ -77,6 +77,31 @@ describe('roster import', () => {
     expect(await Participant.findOne({ urn: 'E25B002749' }).lean()).toMatchObject({ mobile: '9876543210' });
   });
 
+  it('accepts common header spellings and mobile formats', async () => {
+    const res = await request(app)
+      .post('/api/admin/participants/import?mode=commit')
+      .set('Cookie', admin)
+      .attach(
+        'file',
+        csv(
+          [
+            'URN No.,Student Name,Mobile Number,Sec',
+            'E25B002749,Asha Verma,919876543210,A',
+            'E25B002750,Ravi Kumar,09876543211,B',
+          ].join('\n'),
+        ),
+        { filename: 'roster.csv', contentType: 'text/csv' },
+      );
+    expect(res.status).toBe(200);
+    expect(res.body).toMatchObject({ validRows: 2, invalidRows: 0 });
+    expect(await Participant.findOne({ urn: 'E25B002749' }).lean()).toMatchObject({
+      name: 'Asha Verma',
+      mobile: '9876543210',
+      section: 'A',
+    });
+    expect(await Participant.findOne({ urn: 'E25B002750' }).lean()).toMatchObject({ mobile: '9876543211' });
+  });
+
   it('rejects unsupported or fake files', async () => {
     const exe = await request(app)
       .post('/api/admin/participants/import')
