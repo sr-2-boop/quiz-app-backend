@@ -18,6 +18,7 @@ export function authRoutes(limiters) {
   router.post('/admin/google', limiters.adminLogin, validate({ body: adminGoogleBody }), auth.adminGoogleLogin);
   router.post('/logout', auth.logout);
   router.get('/me', requireAuth, limiters.general, auth.me);
+  router.get('/socket-token', requireAuth, limiters.general, auth.socketToken);
 
   return router;
 }

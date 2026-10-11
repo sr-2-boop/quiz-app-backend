@@ -153,11 +153,12 @@ function participantIdentity(p) {
 /**
  * Resolve a JWT into the current identity (used by HTTP middleware and the Socket.IO handshake).
  * Participant tokens are only valid for their current session id and while the participant is active.
+ * @param {{ socket?: boolean }} [options] socket: verify a short-lived Socket.IO token instead of a session token
  */
-export async function authenticateToken(token) {
+export async function authenticateToken(token, { socket = false } = {}) {
   let payload;
   try {
-    payload = verifyToken(token);
+    payload = verifyToken(token, { socket });
   } catch {
     throw unauthorized('Your session has expired. Please sign in again.');
   }

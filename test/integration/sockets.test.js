@@ -54,6 +54,32 @@ describe('Socket.IO live updates', () => {
     return socket;
   }
 
+  it('authenticates with a socket token when the cookie cannot reach the socket host', async () => {
+    const p = await createParticipant();
+    const cookie = await participantCookie(p);
+    const issued = await request(app).get('/api/auth/socket-token').set('Cookie', cookie);
+    expect(issued.status).toBe(200);
+    const socket = connect(url, { auth: { token: issued.body.token }, transports: ['websocket'], reconnection: false });
+    clients.push(socket);
+    await nextEvent(socket, 'connect');
+    const sockets = await io.fetchSockets();
+    expect(sockets[0].rooms.has(`user:${p._id}`)).toBe(true);
+
+    // The socket token is useless for HTTP, and a session token is not a socket token.
+    const { COOKIE_NAME } = await import('../../src/services/token.service.js');
+    expect((await request(app).get('/api/auth/me').set('Cookie', `${COOKIE_NAME}=${issued.body.token}`)).status).toBe(
+      401,
+    );
+    const sessionToken = cookie.split('=')[1];
+    const wrong = connect(url, { auth: { token: sessionToken }, transports: ['websocket'], reconnection: false });
+    clients.push(wrong);
+    expect((await new Promise((resolve) => wrong.on('connect_error', resolve))).message).toBe('unauthorized');
+  });
+
+  it('requires a session to get a socket token', async () => {
+    expect((await request(app).get('/api/auth/socket-token')).status).toBe(401);
+  });
+
   it('rejects unauthenticated handshakes', async () => {
     const socket = client(null);
     const err = await new Promise((resolve) => socket.on('connect_error', resolve));

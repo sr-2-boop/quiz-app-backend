@@ -1,5 +1,5 @@
 import { loginAdmin, loginParticipant, logoutToken } from '../services/auth.service.js';
-import { clearAuthCookie, COOKIE_NAME, setAuthCookie } from '../services/token.service.js';
+import { clearAuthCookie, COOKIE_NAME, setAuthCookie, signSocketToken } from '../services/token.service.js';
 
 export async function participantLogin(req, res) {
   const { token, expiresAt, user } = await loginParticipant(req.body);
@@ -18,6 +18,11 @@ export async function logout(req, res) {
   if (token) await logoutToken(token);
   clearAuthCookie(res);
   res.status(204).end();
+}
+
+/** A short-lived token for the Socket.IO handshake (the socket host may not receive the auth cookie). */
+export function socketToken(req, res) {
+  res.json({ token: signSocketToken({ sub: req.user.id, role: req.user.role, sid: req.user.sid }) });
 }
 
 export function me(req, res) {

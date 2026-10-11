@@ -14,7 +14,8 @@ import { rooms, setIo } from './hub.js';
 const testPayload = z.strictObject({ testId: objectId });
 
 /**
- * Socket.IO with the same JWT verification as HTTP (cookie-based handshake).
+ * Socket.IO with the same JWT verification as HTTP: the auth cookie (same-origin deployments) or a short-lived
+ * socket token from GET /api/auth/socket-token (frontend on its own domain, API proxied through it).
  * Rooms are joined only through the server-side checks below: participants can never join admin rooms,
  * and join a test's public board only when that test enables it.
  * @param {import('node:http').Server} httpServer
@@ -28,6 +29,11 @@ export function initSockets(httpServer) {
 
   io.use(async (socket, next) => {
     try {
+      const socketToken = socket.handshake.auth?.token;
+      if (typeof socketToken === 'string' && socketToken) {
+        socket.data.user = await authenticateToken(socketToken, { socket: true });
+        return next();
+      }
       const token = parseCookie(socket.handshake.headers.cookie ?? '')[COOKIE_NAME];
       if (!token) return next(new Error('unauthorized'));
       socket.data.user = await authenticateToken(token);

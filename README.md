@@ -37,8 +37,11 @@ The IaC file sets `NODE_ENV=production`, `COOKIE_SECURE=true`, `COOKIE_SAME_SITE
 without a path or trailing slash). CORS and Socket.IO both use this allow-list; the HTTP API and the Socket.IO
 handshake both rely on the same `httpOnly` JWT cookie.
 
-On Vercel, set `VITE_API_URL` to the Railway public origin only, without `/api` or `/socket.io`; the frontend
-uses that origin for both HTTP and Socket.IO. Redeploy Vercel after changing the variable. The frontend's
+The frontend's `vercel.json` rewrites `/api/*` to this service, so the login cookie is first-party on the Vercel
+domain (browsers block third-party cookies from `*.up.railway.app`). Set `TRUST_PROXY=2` so rate limits see client
+IPs behind both proxies. On Vercel, set `VITE_API_URL` to the Railway public origin only, without `/api` or
+`/socket.io`; the frontend uses it for the Socket.IO connection, which authenticates with a short-lived token from
+`GET /api/auth/socket-token`. Redeploy Vercel after changing the variable. The frontend's
 deployment README has connection checks and browser troubleshooting.
 
 `COOKIE_SAME_SITE=none` is appropriate for separate Vercel/Railway default hostnames, but browser
